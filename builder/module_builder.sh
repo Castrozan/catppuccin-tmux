@@ -6,13 +6,19 @@ build_status_module() {
   local color="$3"
   local text="$4"
 
-  if [ "$status_fill" = "icon" ]; then
-    local bg="$thm_bg"
-    local show_icon="#[fg=$color,bg=$thm_bg,nobold,nounderscore,noitalics]$icon"
-    local show_text="#[fg=$color,bg=$thm_bg] $text"
+  # Use transparent background when status_background is "default"
+  local module_bg="$thm_bg"
+  if [ "$status_background" = "default" ]; then
+    module_bg="default"
+  fi
 
-    local show_left_separator="#[fg=$thm_bg,bg=$thm_bg,nobold,nounderscore,noitalics] "
-    local show_right_separator="#[fg=$thm_bg,bg=$thm_bg,nobold,nounderscore,noitalics] "
+  if [ "$status_fill" = "icon" ]; then
+    local bg="$module_bg"
+    local show_icon="#[fg=$color,bg=$module_bg,nobold,nounderscore,noitalics]$icon"
+    local show_text="#[fg=$color,bg=$module_bg] $text"
+
+    local show_left_separator="#[fg=$module_bg,bg=$module_bg,nobold,nounderscore,noitalics] "
+    local show_right_separator="#[fg=$module_bg,bg=$module_bg,nobold,nounderscore,noitalics] "
   fi
 
   if [ "$status_fill" = "all" ]; then
@@ -31,7 +37,7 @@ build_status_module() {
   fi
 
   if [ $((index)) -eq 0 ]; then
-    local show_left_separator="#[fg=$bg,bg=$thm_bg,nobold,nounderscore,noitalics]"
+    local show_left_separator="#[fg=$bg,bg=$module_bg,nobold,nounderscore,noitalics]"
   fi
 
   echo "$show_left_separator$show_icon$show_text$show_right_separator"
