@@ -2,8 +2,8 @@ show_cpu() {
   local index icon color text module
 
   index=$1
-  icon=$(get_tmux_option "@catppuccin_cpu_icon" "")
-  color="$(get_tmux_option "@catppuccin_cpu_color" "#{cpu_bg_color}")"
+  icon=$(get_tmux_option "@catppuccin_cpu_icon" "󰻠")
+  color="$(get_tmux_option "@catppuccin_cpu_color" "$thm_yellow")"
   text="$(get_tmux_option "@catppuccin_cpu_text" "#{cpu_percentage}")"
 
   tmux set-option -g @cpu_low_bg_color "$thm_yellow"    # background color when cpu is low
