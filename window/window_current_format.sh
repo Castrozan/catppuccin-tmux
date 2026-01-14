@@ -3,7 +3,14 @@ show_window_current_format() {
 
   number="#I"
   color=$(get_tmux_option "@catppuccin_window_current_color" "$thm_green")
-  background=$(get_tmux_option "@catppuccin_window_current_background" "$thm_bg")
+
+  # Use transparent background when status_background is "default"
+  if [ "$status_background" = "default" ]; then
+    background=$(get_tmux_option "@catppuccin_window_current_background" "default")
+  else
+    background=$(get_tmux_option "@catppuccin_window_current_background" "$thm_bg")
+  fi
+
   text="$(get_tmux_option "@catppuccin_window_current_text" "#{b:pane_current_path}")" # use #W for application instead of directory
   fill="$(get_tmux_option "@catppuccin_window_current_fill" "number")"                 # number, all, none
 
