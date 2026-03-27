@@ -55,6 +55,30 @@ main() {
     color_values+=("${temp}")
   done <"${PLUGIN_DIR}/themes/catppuccin_${theme}.tmuxtheme"
 
+  local theme_override_file
+  theme_override_file="$(get_tmux_option "@catppuccin_theme_override_file" "")"
+  if [ -n "$theme_override_file" ] && [ -f "$theme_override_file" ]; then
+    while IFS='=' read -r key val; do
+      [ "${key##\#*}" ] || continue
+      eval "local $key"="$val"
+      temp="${val%\"}"
+      temp="${temp#\"}"
+      local override_index=-1
+      for ((i = 0; i < ${#color_interpolation[@]}; i++)); do
+        if [ "${color_interpolation[$i]}" = "\#{$key}" ]; then
+          override_index=$i
+          break
+        fi
+      done
+      if [ "$override_index" -ge 0 ]; then
+        color_values[$override_index]="${temp}"
+      else
+        color_interpolation+=("\#{$key}")
+        color_values+=("${temp}")
+      fi
+    done <"$theme_override_file"
+  fi
+
   # status general
   local status_default status_justify status_background message_background
   status_default=$(get_tmux_option "@catppuccin_status_default" "on")
